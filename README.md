@@ -4,6 +4,9 @@ Sotreus API allows you to interact with the WireGuard server and client configur
 
 ## Base URL
 
+- `Initial:` parentingchat-vpn.sotreus.com
+- `Current:` parentingchat-vpn.sotreus.com
+
 `https://us01-vpn.sotreus.com`
 
 # Endpoints
