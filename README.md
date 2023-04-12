@@ -1,46 +1,174 @@
-# Getting Started with Create React App
+# Sotreus API Documentation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Sotreus API allows you to interact with the WireGuard server and client configurations. This API can be used to manage the WireGuard VPN service, clients, and their configurations.
 
-## Available Scripts
+## Base URL
 
-In the project directory, you can run:
+`https://us01-vpn.sotreus.com`
 
-### `npm start`
+# Endpoints
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Get Status
+- `Endpoint:` GET /api/v1.0/server/status
+- `Description:` Get the current version of the wg-control service.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Get Clients
+- `Endpoint:` GET /api/v1.0/client
+- `Description:` Get all the clients' information configured with the WireGuard VPN server.
+- `Response (JSON):`
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "id": "f70e69e0-a3c9-454d-9082-529c42d59c91",
+      "name": "ClientName",
+      "tags": ["mobile", "laptop"],
+      "email": "client@example.com",
+      "enabled": true,
+      "allowedIPs": ["0.0.0.0/0", "::/0"],
+      "address": ["10.0.0.1/24"],
+      "createdBy": "admin@example.com"
+    }
+  ]
+}
+```
 
-### `npm test`
+## Get Client Information
+- `Endpoint:` GET /api/v1.0/client/:client_id
+- `Description:` Get the client information configured with the WireGuard VPN server based on the ID (UUID).
+- `Response (JSON):`
+```json
+{
+  "status": "success",
+  "data": {
+    "id": "f70e69e0-a3c9-454d-9082-529c42d59c91",
+    "name": "ClientName",
+    "tags": ["mobile", "laptop"],
+    "email": "client@example.com",
+    "enabled": true,
+    "allowedIPs": ["0.0.0.0/0", "::/0"],
+    "address": ["10.0.0.1/24"],
+    "createdBy": "admin@example.com"
+  }
+}
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Get Client Configuration File
+- `Endpoint:` GET /api/v1.0/client/:client_id/config
+- `Description:` Get the client configuration file based on the ID (UUID).
+- `Query Parameters:`
+    - `qrcode:` (Optional) Set to true to get the QR code version of the configuration file.
 
-### `npm run build`
+## Email Client Configuration File
+- `Endpoint:` GET /api/v1.0/client/:client_id/email
+- `Description:` Send the client configuration file as an email attachment based on the ID (UUID).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Create Client
+- `Endpoint:` POST /api/v1.0/client
+- `Description:` Create a client configuration to connect to the WireGuard VPN - network.
+- `Request (JSON):`
+```json
+{
+  "name": "NewClient",
+  "tags": ["tablet", "home"],
+  "email": "newclient@example.com",
+  "enabled": true,
+  "allowedIPs": ["0.0.0.0/0", "::/0"],
+  "address": ["10.0.0.2/24"],
+  "createdBy": "admin@example.com"
+}
+```
+- `Response (JSON):`
+```json
+{
+  "status": "success",
+  "data": {
+    "id": "1ab93e35-02af-4d71-a6cd-0ddc7d9e9d6e",
+    "message": "Client added successfully"
+  }
+}
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Update Client
+- `Endpoint:` PATCH /api/v1.0.1/client/:client_id
+- `Description:` Update a client configuration to connect with the WireGuard VPN network based on the client ID (UUID).
+- `Request (JSON):` 
+```json
+{
+    "id": "e3dece98-7fd8-4357-ae24-10e70c527570",
+    "name": "Android1",
+    "type": "mobile",
+    "email": "shachindra.spidey@gmail.com",
+    "enable": true,
+    "ignorePersistentKeepalive": false,
+    "presharedKey": "Dj0kmT394WfBGwAdh21z+na2bsoD1N0wvpq/Q4prz7s=",
+    "allowedIPs": [
+        "0.0.0.0/0",
+        "::/0"
+    ],
+    "address": [
+        "10.0.0.2/32"
+    ],
+    "privateKey": "CBPbj1foVOtv15nnKZdbHBwGPkeHO1uh/Ud0PM28B1g=",
+    "publicKey": "pHvmAbcwhP/e1f0s4z3XvnlWEeolSRXKrL7A4/8Dh1I=",
+    "createdBy": "shachindra.spidey@gmail.com",
+    "updatedBy": "shachindra.spidey@gmail.com",
+    "created": "2020-08-09T06:17:37.182597213Z",
+    "updated": "2020-08-09T06:17:37.182597213Z"
+}
+```
+- `Response (JSON):`
+```json
+{
+  "status": "success",
+  "data": {
+    "message": "Client updated successfully"
+  }
+}
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Delete Client
+- `Endpoint:` DELETE /api/v1.0/client/:client_id
+- `Description:` Delete a client configured to connect to the WireGuard VPN network based on the UUID (ID).
 
-### `npm run eject`
+## Get Server Information
+- `Endpoint:` GET /api/v1.0/server
+- `Description:` Get server information hosting the WireGuard VPN service.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Get Server Configuration
+- `Endpoint:` GET /api/v1.0/server/config
+- `Description:` Get the server configuration file running the WireGuard VPN service.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Update Server
+- `Endpoint:` PATCH /api/v1.0/server
+- `Description:` Update the server configuration file running the WireGuard VPN service.
+- `Request (JSON):`
+```json
+{
+    "address": [
+        "10.0.0.1/24"
+    ],
+    "listenPort": 51820,
+    "mtu": 0,
+    "privateKey": "4Brz+b90sQr5D3Dnv/ZRFntdMkM/pXF6lBRzwNzc9ls=",
+    "publicKey": "a09nj5vZMCc7D3jut4FmKC8tBQyABt/fLVwh3lXze0M=",
+    "endpoint": "sg01.lazarus.network:51820",
+    "persistentKeepalive": 16,
+    "dns": [
+        "1.1.1.1"
+    ],
+    "preUp": "echo WireGuard PreUp",
+    "postUp": "iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE",
+    "preDown": "echo WireGuard PreDown",
+    "postDown": "iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE",
+    "SaveConfig": false,
+    "created": "2020-04-15T00:28:38.228754474Z",
+    "updated": "2020-04-15T20:40:01.810224871Z"
+}
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Errors
+Errors are returned as an object with the following properties:
+- `code:` An integer error code.
+- `message:` A string description of the error.
