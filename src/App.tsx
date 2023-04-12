@@ -1,18 +1,17 @@
+// App.tsx
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// Import your components here
+import Dashboard from './pages/Dashboard';
 
-function App() {
+const App = () => {
   return (
     <Router>
-      <div className="App">
-        {/* Add your navigation components here */}
+      <div>
         <Routes>
-          {/* Add your routes here, e.g. */}
-          {/* <Route exact path="/" component={Home} /> */}
+          <Route path="/" element={<Dashboard />} />
         </Routes>
       </div>
     </Router>
   );
-}
+};
 
 export default App;
