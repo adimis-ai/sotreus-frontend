@@ -61,7 +61,7 @@ export const ClientContainer: React.FC<ClientContainerProps> = ({ clients }) => 
               className="bg-black border border-blue-300 text-white px-6 py-2 rounded-lg shadow-lg transition-all hover:bg-blue-200 hover:text-black hover:border-black mb-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               onClick={() => setCard(true)}
             >
-              List View
+              Card View
             </button>
 
             <div

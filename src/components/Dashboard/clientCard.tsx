@@ -71,7 +71,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="w-full p-5 bg-gray-900 shadow-xl shadow-blue-400/30 bg-center bg-cover rounded-lg shadow-md">
+      <div className="w-full p-5 bg-gradient-to-r from-black via-gray-800 to-black shadow-xl shadow-blue-400/30 bg-center bg-cover rounded-lg shadow-md">
         <motion.div
           className="flex flex-col justify-between"
           initial={{ y: -20 }}

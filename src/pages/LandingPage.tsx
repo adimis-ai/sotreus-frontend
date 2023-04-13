@@ -27,7 +27,7 @@ const LandingPage = () => {
                         Discover Sotreus, a reliable WireGuard VPN server, simplifying client configurations for seamless online privacy.
                       </p>
                       <div className="mb-4 space-x-0 md:space-x-2 md:mb-8">
-                          <Link to="/dashboard" className="inline-flex items-center font-bold justify-center w-full px-6 py-3 mb-2 text-lg text-black rounded-2xl sm:w-auto sm:mb-0 transition bg-blue-400 hover:bg-blue-200 focus:ring focus:ring-blue-500 focus:ring-opacity-80">
+                          <Link to="/dashboard" className="inline-flex items-center font-bold justify-center w-full px-6 py-3 mb-2 text-lg text-black rounded-2xl sm:w-auto sm:mb-0 transition bg-blue-300 hover:bg-blue-200 focus:ring focus:ring-blue-500 focus:ring-opacity-80">
                             Dashboard
                           </Link>
                       </div>

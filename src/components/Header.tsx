@@ -9,9 +9,9 @@ const Header = () => {
             </div>
             <div className="flex-none">
                 <ul className="menu menu-horizontal px-1">
-                    <div className='flex space-x-2'>
-                        <li><a href='/dashboard' className='border text-blue-200 border-blue hover:bg-blue-300 hover:border-black hover:text-black font-bold'>Dashboard</a></li>
-                        <li><a href='/server' className='font-bold border border-black bg-blue-300 text-black hover:bg-black hover:border-blue-300 hover:text-blue-200'>Server</a></li>
+                    <div className='flex space-x-2'> 
+                        <li><a href='/dashboard' className='border text-blue-200 border-blue hover:bg-blue-300 hover:border-black hover:text-black font-bold transition focus:ring focus:ring-blue-500 focus:ring-opacity-80'>Dashboard</a></li>
+                        <li><a href='/server' className='font-bold border border-black bg-blue-300 text-black hover:bg-black hover:border-blue-300 hover:text-blue-200 transition focus:ring focus:ring-blue-500 focus:ring-opacity-80'>Server</a></li>
                     </div>
                 </ul>
             </div>
@@ -19,5 +19,4 @@ const Header = () => {
     </div>
   )
 }
-
 export default Header
