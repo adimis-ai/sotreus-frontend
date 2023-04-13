@@ -2,6 +2,23 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const baseURL = 'https://us01-vpn.sotreus.com';
 
+export interface UpdateClientPayload {
+  id: string;
+  name: string;
+  type: string;
+  email: string;
+  enable: boolean;
+  ignorePersistentKeepalive: boolean;
+  presharedKey: string;
+  allowedIPs: string[];
+  address: string[];
+  privateKey: string;
+  publicKey: string;
+  createdBy: string;
+  updatedBy: string;
+  created: string;
+  updated: string;
+}
 export interface CreateClientPayload {
   name: string;
   tags: string[];
@@ -11,44 +28,45 @@ export interface CreateClientPayload {
   address: string[];
   createdBy: string;
 }
-
 async function callSotreusAPI(
-    endpoint: string,
-    method: 'GET' | 'POST' | 'DELETE',
-    payload?: CreateClientPayload | null,
-    clientId?: string,
-    qrcode?: boolean
-  ): Promise<AxiosResponse<any>> {
-    const axiosInstance = axios.create({
-      baseURL,
-    });
-  
-    const config: AxiosRequestConfig = {
-      method,
-      url: clientId ? endpoint.replace(':client_id', clientId) : endpoint,
-    };
-  
-    if (qrcode) {
-      config.params = { qrcode: true };
-    }
-  
-    if (payload) {
-      config.data = payload;
-    }
-  
-    return axiosInstance(config);
-}  
+  endpoint: string,
+  method: 'GET' | 'POST' | 'DELETE' | 'PATCH',
+  payload?: CreateClientPayload | UpdateClientPayload | null,
+  clientId?: string,
+  qrcode?: boolean
+): Promise<AxiosResponse<any>> {
+  const axiosInstance = axios.create({
+    baseURL,
+  });
 
+  const config: AxiosRequestConfig = {
+    method,
+    url: clientId ? endpoint.replace(':client_id', clientId) : endpoint,
+  };
+
+  if (qrcode) {
+    config.params = { qrcode: true };
+  }
+
+  if (payload) {
+    config.data = payload;
+  }
+
+  return axiosInstance(config);
+}
+
+// ============================================================================ //
+// ========================= { CLIENT ENDPOINTS } ============================ //
 export async function createClient(payload: CreateClientPayload): Promise<AxiosResponse<any>> {
   return callSotreusAPI('/api/v1.0/client', 'POST', payload);
 }
 
-export async function getClientConfig(clientId: string, qrcode?: boolean): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0/client/:client_id/config', 'GET', null, clientId, qrcode);
+export async function updateClient(clientId: string, payload: UpdateClientPayload): Promise<AxiosResponse<any>> {
+  return callSotreusAPI('/api/v1.0.1/client/:client_id', 'PATCH', payload, clientId);
 }
 
-export async function getStatus(): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0/server/status', 'GET');
+export async function getClientConfig(clientId: string, qrcode?: boolean): Promise<AxiosResponse<any>> {
+  return callSotreusAPI('/api/v1.0/client/:client_id/config', 'GET', null, clientId, qrcode);
 }
 
 export async function getClients(): Promise<AxiosResponse<any>> {
@@ -66,6 +84,10 @@ export async function emailClientConfig(clientId: string): Promise<AxiosResponse
 export async function deleteClient(clientId: string): Promise<AxiosResponse<any>> {
   return callSotreusAPI('/api/v1.0/client/:client_id', 'DELETE', null, clientId);
 }
+// ========================= { SERVER ENDPOINTS } ============================ //
+export async function getStatus(): Promise<AxiosResponse<any>> {
+  return callSotreusAPI('/api/v1.0/server/status', 'GET');
+}
 
 export async function getServerInfo(): Promise<AxiosResponse<any>> {
   return callSotreusAPI('/api/v1.0/server', 'GET');
@@ -74,3 +96,4 @@ export async function getServerInfo(): Promise<AxiosResponse<any>> {
 export async function getServerConfig(): Promise<AxiosResponse<any>> {
   return callSotreusAPI('/api/v1.0/server/config', 'GET');
 }
+// ============================================================================ //

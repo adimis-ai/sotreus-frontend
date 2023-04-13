@@ -68,7 +68,7 @@ export const ClientList: React.FC<ClientListProps> = ({ clients }) => {
     });
   };
   return (
-    <div className="w-full bg-gradient-to-br from-black via-black to-blue-800 p-6 rounded-lg shadow-xl shadow-blue-400/30">
+    <div className="w-full bg-gradient-to-r from-black via-gray-800 to-black p-6 rounded-lg shadow-xl shadow-blue-400/30">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-blue-500 text-white text-left">
           <thead>
@@ -85,7 +85,7 @@ export const ClientList: React.FC<ClientListProps> = ({ clients }) => {
           </thead>
           <tbody>
             {clients.map((client, index) => (
-              <tr key={client.UUID} className={index % 2 === 0 ? 'bg-gradient-to-r from-black via-blue-900 to-black' : 'bg-gradient-to-r from-black via-blue-800 to-black'}>
+              <tr key={client.UUID} className={index % 2 === 0 ? 'bg-gradient-to-r from-black via-gray-800 to-black' : 'bg-gradient-to-r from-black via-gray-900 to-black'}>
                 <td className="px-4 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium">{client.Name}</div>
                 </td>

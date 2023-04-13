@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Client } from './types';
 import { AiFillEdit } from 'react-icons/ai';
+import { updateClient, UpdateClientPayload } from '../../modules/index';
 
 interface ClientEditProps {
-    client: Client;
+  client: Client;
 }
 
 export const ClientEdit: React.FC<ClientEditProps> = ({ client }) => {
@@ -12,14 +13,43 @@ export const ClientEdit: React.FC<ClientEditProps> = ({ client }) => {
     const [tags, setTags] = useState(client.Tags.join(', '));
     const [enable, setEnable] = useState(client.Enable);
 
-    const handleEditClient = () => {
-        // Call the API to update the client with the form data
-        console.log('Submitting the form with the following data:', {
-          name,
-          email,
-          tags: tags.split(',').map((tag) => tag.trim()),
-          enable,
-        });
+    const handleEditClient = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const tagsArray = tags.split(',').map((tag) => tag.trim());
+
+        const updatedClient = {
+            ...client,
+            Name: name,
+            Email: email,
+            Enable: enable,
+            Tags: tagsArray,
+        };
+
+        const updatedPayload: UpdateClientPayload = {
+            id: updatedClient.UUID,
+            name: updatedClient.Name,
+            type: updatedClient.Tags[0], 
+            email: updatedClient.Email,
+            enable: updatedClient.Enable,
+            ignorePersistentKeepalive: false, 
+            presharedKey: updatedClient.PresharedKey,
+            allowedIPs: updatedClient.AllowedIPs,
+            address: updatedClient.Address,
+            privateKey: updatedClient.PrivateKey,
+            publicKey: updatedClient.PublicKey,
+            createdBy: updatedClient.CreatedBy,
+            updatedBy: updatedClient.CreatedBy, 
+            created: new Date(updatedClient.Created).toISOString(),
+            updated: new Date().toISOString()
+        };
+
+        try {
+            const response = await updateClient(client.UUID, updatedPayload);
+            console.log('Client updated successfully:', response.data);
+        } catch (error) {
+            console.error('Error updating client:', error);
+        }
     };
 
     return (
@@ -27,7 +57,7 @@ export const ClientEdit: React.FC<ClientEditProps> = ({ client }) => {
             <label htmlFor="client-edit"><AiFillEdit/></label>
             <input type="checkbox" id="client-edit" className="modal-toggle" />
             <div className="modal">
-            <div className="modal-box relative bg-gradient-to-br from-black via-black to-blue-800 p-5">
+            <div className="modal-box relative w-full bg-gray-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-80 border border-gray-100">
                 <label htmlFor="client-edit" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                 <h3 className="text-3xl text-blue-200 font-bold">Edit Client Information</h3>
                     <div>

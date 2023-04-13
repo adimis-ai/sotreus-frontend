@@ -1,7 +1,7 @@
 import React from 'react';
 import { Client } from './types';
 import { motion } from 'framer-motion';
-import QrCode from './QrCode';
+import QrCode from './qrCode';
 import { emailClientConfig, getClientConfig, deleteClient } from '../../modules/index';
 import { saveAs } from 'file-saver';
 import { HiOutlineMail, HiOutlineTag, HiOutlineSwitchHorizontal, HiOutlineCalendar, HiOutlineRefresh } from 'react-icons/hi';
@@ -71,18 +71,18 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="w-full h-full p-5 bg-gradient-to-br from-black via-blue-900 to-black shadow-xl shadow-blue-400/30 bg-center bg-cover rounded-lg shadow-md">
+      <div className="w-full p-5 bg-gray-900 shadow-xl shadow-blue-400/30 bg-center bg-cover rounded-lg shadow-md">
         <motion.div
-          className="flex flex-col h-full justify-between"
+          className="flex flex-col justify-between"
           initial={{ y: -20 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.4 }}
         >
           {/* Top left corner of the card */}
           <div className="flex justify-between">
-            <button className="bg-gradient-to-r from-blue-300 to-blue-500 text-gray-900 font-semibold rounded-lg p-2">
+            <div className="bg-gradient-to-r from-blue-300 to-blue-500 text-gray-900 font-semibold rounded-lg p-2">
               <ClientEdit client={client}/>
-            </button>
+            </div>
             <button onClick={() => handleDelete(client.UUID)} className="bg-gradient-to-r from-blue-300 to-blue-500 text-gray-900 font-semibold rounded-lg p-2">
               <MdDelete />
             </button>
@@ -96,7 +96,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
             </div>
             <div className="flex items-center mt-2">
               <HiOutlineTag className="mr-2" />
-              <div>Tags: {client.Tags.join(', ')}</div>
+              <div className='camelCase'>{client.Tags.join(', ')}</div>
             </div>
             <div className="flex items-center mt-2">
               <HiOutlineSwitchHorizontal className="mr-2" />

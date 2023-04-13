@@ -21,13 +21,13 @@ export const ClientContainer: React.FC<ClientContainerProps> = ({ clients }) => 
   };
 
   return (
-<>
-  <motion.div
-    className="container mx-auto px-4 py-8"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.5 }}
-  >
+    <>
+      <motion.div
+        className="container mx-auto px-8 py-8 border border-blue-200 rounded-xl shadow-xl shadow-blue-300/30 bg-gray-800 bg-opacity-40"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
     {card ? (
       <>
         <div className='flex justify-between'>
@@ -38,11 +38,11 @@ export const ClientContainer: React.FC<ClientContainerProps> = ({ clients }) => 
             List View
           </button>
 
-          <button
-            className="bg-gradient-to-br bg-black border border-blue-300 text-white px-6 py-2 rounded-lg shadow-lg transition-all hover:from-blue-300 hover:to-blue-200 hover:text-black hover:border-black mb-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          <div
+            className="px-6 py-2 rounded-lg shadow-lg transition-all mb-10 border border-black bg-blue-300 text-black hover:bg-black hover:border-blue-300 hover:text-blue-200"
           >
             <AddClient/>
-          </button>
+          </div>
         </div>
 
         <motion.div
@@ -58,17 +58,17 @@ export const ClientContainer: React.FC<ClientContainerProps> = ({ clients }) => 
       <>
         <div className='flex justify-between'>
           <button
-            className="bg-gradient-to-br bg-black border border-blue-300 text-white px-6 py-2 rounded-lg shadow-lg transition-all hover:from-blue-300 hover:to-blue-200 hover:text-black hover:border-black mb-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="bg-black border border-blue-300 text-white px-6 py-2 rounded-lg shadow-lg transition-all hover:bg-blue-200 hover:text-black hover:border-black mb-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             onClick={() => setCard(true)}
           >
             List View
           </button>
 
-          <button
-            className="bg-gradient-to-br bg-black border border-blue-300 text-white px-6 py-2 rounded-lg shadow-lg transition-all hover:from-blue-300 hover:to-blue-200 hover:text-black hover:border-black mb-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          <div
+            className="px-6 py-2 rounded-lg shadow-lg transition-all mb-10 border border-black bg-blue-300 text-black hover:bg-black hover:border-blue-300 hover:text-blue-200"
           >
             <AddClient/>
-          </button>
+          </div>
         </div>
         <motion.div
           initial={{ opacity: 0, y: -50 }}
