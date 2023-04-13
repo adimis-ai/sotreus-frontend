@@ -4,7 +4,7 @@ import { Client } from './types';
 import { HiOutlineMail , HiDownload } from 'react-icons/hi';
 import { MdDelete } from 'react-icons/md';
 import ClientEdit from './clientEdit';
-import { emailClientConfig, getClientConfig, deleteClient } from '../../modules/index';
+import { emailClientConfig, getClientConfig, deleteClient } from '../../modules/api';
 import { saveAs } from 'file-saver';
 import { IconContext } from "react-icons";
 

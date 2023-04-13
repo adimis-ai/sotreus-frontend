@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createClient, CreateClientPayload } from '/home/adimis/Desktop/Netsepio/sotreus/src/modules/index';
+import { createClient, CreateClientPayload } from '../../modules/api';
 
 const AddClient = () => {
   const [name, setName] = useState("");

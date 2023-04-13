@@ -28,57 +28,57 @@ export const ClientContainer: React.FC<ClientContainerProps> = ({ clients }) => 
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-    {card ? (
-      <>
-        <div className='flex justify-between'>
-          <button
-            className="bg-gradient-to-br bg-black border border-blue-300 text-white px-6 py-2 rounded-lg shadow-lg transition-all hover:from-blue-300 hover:to-blue-200 hover:text-black hover:border-black mb-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            onClick={() => setCard(false)}
-          >
-            List View
-          </button>
+      {card ? (
+        <>
+          <div className='flex justify-between'>
+            <button
+              className="bg-gradient-to-br bg-black border border-blue-300 text-white px-6 py-2 rounded-lg shadow-lg transition-all hover:from-blue-300 hover:to-blue-200 hover:text-black hover:border-black mb-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              onClick={() => setCard(false)}
+            >
+              List View
+            </button>
 
-          <div
-            className="px-6 py-2 rounded-lg shadow-lg transition-all mb-10 border border-black bg-blue-300 text-black hover:bg-black hover:border-blue-300 hover:text-blue-200"
-          >
-            <AddClient/>
+            <div
+              className="px-6 py-2 rounded-lg shadow-lg transition-all mb-10 border border-black bg-blue-300 text-black hover:bg-black hover:border-blue-300 hover:text-blue-200"
+            >
+              <AddClient/>
+            </div>
           </div>
-        </div>
 
-        <motion.div
-          className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          {renderCards()}
-        </motion.div>
-      </>
-    ) : (
-      <>
-        <div className='flex justify-between'>
-          <button
-            className="bg-black border border-blue-300 text-white px-6 py-2 rounded-lg shadow-lg transition-all hover:bg-blue-200 hover:text-black hover:border-black mb-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            onClick={() => setCard(true)}
+          <motion.div
+            className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            List View
-          </button>
+            {renderCards()}
+          </motion.div>
+        </>
+      ) : (
+        <>
+          <div className='flex justify-between'>
+            <button
+              className="bg-black border border-blue-300 text-white px-6 py-2 rounded-lg shadow-lg transition-all hover:bg-blue-200 hover:text-black hover:border-black mb-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              onClick={() => setCard(true)}
+            >
+              List View
+            </button>
 
-          <div
-            className="px-6 py-2 rounded-lg shadow-lg transition-all mb-10 border border-black bg-blue-300 text-black hover:bg-black hover:border-blue-300 hover:text-blue-200"
-          >
-            <AddClient/>
+            <div
+              className="px-6 py-2 rounded-lg shadow-lg transition-all mb-10 border border-black bg-blue-300 text-black hover:bg-black hover:border-blue-300 hover:text-blue-200"
+            >
+              <AddClient/>
+            </div>
           </div>
-        </div>
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <ClientList clients={clients} />
-        </motion.div>
-      </>
-    )}
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <ClientList clients={clients} />
+          </motion.div>
+        </>
+      )}
   </motion.div>
 </>
   );

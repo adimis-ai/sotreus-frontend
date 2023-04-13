@@ -2,7 +2,7 @@ import React from 'react';
 import { Client } from './types';
 import { motion } from 'framer-motion';
 import QrCode from './qrCode';
-import { emailClientConfig, getClientConfig, deleteClient } from '../../modules/index';
+import { emailClientConfig, getClientConfig, deleteClient } from '../../modules/api';
 import { saveAs } from 'file-saver';
 import { HiOutlineMail, HiOutlineTag, HiOutlineSwitchHorizontal, HiOutlineCalendar, HiOutlineRefresh } from 'react-icons/hi';
 

@@ -1,3 +1,8 @@
+You are a frontend developer and you have to create a web application that will allow users to create a WireGuard VPN client configuration. The application should be able to create a client configuration and download it as a file. 
+
+You have already created the Dashboard Page and now you have to Server page but you were not provided with the requirements for building the UI only the API documentation was provided.
+
+Please reference the following API documentation and tell me how will you build the Server page.
 # Sotreus API Documentation
 
 Sotreus API allows you to interact with the WireGuard server and client configurations. This API can be used to manage the WireGuard VPN service, clients, and their configurations.
@@ -10,7 +15,91 @@ Sotreus API allows you to interact with the WireGuard server and client configur
 `https://us01-vpn.sotreus.com`
 
 # Endpoints
-## ========================= { CLIENT PAGE } ============================ #
+
+## ========================= { SERVER PAGE } ============================ #
+## Get Status
+- `Endpoint:` GET /api/v1.0/server/status
+- `Description:` Get the current version of the wg-control service.
+- `Response (JSON):`
+```json
+{
+    "Version": "1.0",
+    "Hostname": "parentingchat-sotreus.local",
+    "Domain": "parentingchat",
+    "PublicIP": "18.220.147.81",
+    "gRPCPort": "9091",
+    "PrivateIP": "172.18.0.3,",
+    "HttpPort": "9081",
+    "Region": "us01",
+    "VPNPort": "51820"
+}
+```
+## Get Server Information
+- `Endpoint:` GET /api/v1.0/server
+- `Description:` Get server information hosting the WireGuard VPN service.
+## Get Server Configuration
+- `Endpoint:` GET /api/v1.0/server/config
+- `Description:` Get the server configuration file running the WireGuard VPN service.
+## Update Server
+- `Endpoint:` PATCH /api/v1.0/server
+- `Description:` Update the server configuration file running the WireGuard VPN service.
+- `Request (JSON):`
+```json
+{
+    "address": [
+        "10.0.0.1/24"
+    ],
+    "listenPort": 51820,
+    "mtu": 0,
+    "privateKey": "4Brz+b90sQr5D3Dnv/ZRFntdMkM/pXF6lBRzwNzc9ls=",
+    "publicKey": "a09nj5vZMCc7D3jut4FmKC8tBQyABt/fLVwh3lXze0M=",
+    "endpoint": "sg01.lazarus.network:51820",
+    "persistentKeepalive": 16,
+    "dns": [
+        "1.1.1.1"
+    ],
+    "preUp": "echo WireGuard PreUp",
+    "postUp": "iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE",
+    "preDown": "echo WireGuard PreDown",
+    "postDown": "iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE",
+    "SaveConfig": false,
+    "created": "2020-04-15T00:28:38.228754474Z",
+    "updated": "2020-04-15T20:40:01.810224871Z"
+}
+```
+
+
+Are you sure that this would send following JSON payload to [Update Server] endpoint to send the PATCH request:
+
+JSON payload required:
+- `Request (JSON):`
+```json
+{
+    "address": [
+        "10.0.0.1/24"
+    ],
+    "listenPort": 51820,
+    "mtu": 0,
+    "privateKey": "4Brz+b90sQr5D3Dnv/ZRFntdMkM/pXF6lBRzwNzc9ls=",
+    "publicKey": "a09nj5vZMCc7D3jut4FmKC8tBQyABt/fLVwh3lXze0M=",
+    "endpoint": "sg01.lazarus.network:51820",
+    "persistentKeepalive": 16,
+    "dns": [
+        "1.1.1.1"
+    ],
+    "preUp": "echo WireGuard PreUp",
+    "postUp": "iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE",
+    "preDown": "echo WireGuard PreDown",
+    "postDown": "iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE",
+    "SaveConfig": false,
+    "created": "2020-04-15T00:28:38.228754474Z",
+    "updated": "2020-04-15T20:40:01.810224871Z"
+}
+```
+
+
+# ======================================================================== #
+## ========================= { DASHBOARD PAGE } ============================ #
 ## Create Client
 - `Endpoint:` POST /api/v1.0/client
 - `Description:` Create a client configuration to connect to the WireGuard VPN - network.
@@ -223,55 +312,3 @@ PersistentKeepalive = 16
   }
 }
 ```
-## ========================= { SERVER PAGE } ============================ #
-## Get Status
-- `Endpoint:` GET /api/v1.0/server/status
-- `Description:` Get the current version of the wg-control service.
-- `Response (JSON):`
-```json
-{
-    "Version": "1.0",
-    "Hostname": "parentingchat-sotreus.local",
-    "Domain": "parentingchat",
-    "PublicIP": "18.220.147.81",
-    "gRPCPort": "9091",
-    "PrivateIP": "172.18.0.3,",
-    "HttpPort": "9081",
-    "Region": "us01",
-    "VPNPort": "51820"
-}
-```
-## Get Server Information
-- `Endpoint:` GET /api/v1.0/server
-- `Description:` Get server information hosting the WireGuard VPN service.
-## Get Server Configuration
-- `Endpoint:` GET /api/v1.0/server/config
-- `Description:` Get the server configuration file running the WireGuard VPN service.
-## Update Server
-- `Endpoint:` PATCH /api/v1.0/server
-- `Description:` Update the server configuration file running the WireGuard VPN service.
-- `Request (JSON):`
-```json
-{
-    "address": [
-        "10.0.0.1/24"
-    ],
-    "listenPort": 51820,
-    "mtu": 0,
-    "privateKey": "4Brz+b90sQr5D3Dnv/ZRFntdMkM/pXF6lBRzwNzc9ls=",
-    "publicKey": "a09nj5vZMCc7D3jut4FmKC8tBQyABt/fLVwh3lXze0M=",
-    "endpoint": "sg01.lazarus.network:51820",
-    "persistentKeepalive": 16,
-    "dns": [
-        "1.1.1.1"
-    ],
-    "preUp": "echo WireGuard PreUp",
-    "postUp": "iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE",
-    "preDown": "echo WireGuard PreDown",
-    "postDown": "iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE",
-    "SaveConfig": false,
-    "created": "2020-04-15T00:28:38.228754474Z",
-    "updated": "2020-04-15T20:40:01.810224871Z"
-}
-```
-# ======================================================================== #

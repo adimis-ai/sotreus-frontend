@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { customData } from './sampleData';
 
 const baseURL = 'https://us01-vpn.sotreus.com';
 
@@ -55,8 +56,6 @@ async function callSotreusAPI(
   return axiosInstance(config);
 }
 
-// ============================================================================ //
-// ========================= { CLIENT ENDPOINTS } ============================ //
 export async function createClient(payload: CreateClientPayload): Promise<AxiosResponse<any>> {
   return callSotreusAPI('/api/v1.0/client', 'POST', payload);
 }
@@ -69,6 +68,14 @@ export async function getClientConfig(clientId: string, qrcode?: boolean): Promi
   return callSotreusAPI('/api/v1.0/client/:client_id/config', 'GET', null, clientId, qrcode);
 }
 
+export async function emailClientConfig(clientId: string): Promise<AxiosResponse<any>> {
+  return callSotreusAPI('/api/v1.0/client/:client_id/email', 'GET', null, clientId);
+}
+
+export async function deleteClient(clientId: string): Promise<AxiosResponse<any>> {
+  return callSotreusAPI('/api/v1.0/client/:client_id', 'DELETE', null, clientId);
+}
+
 export async function getClients(): Promise<AxiosResponse<any>> {
   return callSotreusAPI('/api/v1.0/client', 'GET');
 }
@@ -77,23 +84,44 @@ export async function getClientInfo(clientId: string): Promise<AxiosResponse<any
   return callSotreusAPI('/api/v1.0/client/:client_id', 'GET', null, clientId);
 }
 
-export async function emailClientConfig(clientId: string): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0/client/:client_id/email', 'GET', null, clientId);
-}
+export const getStatus = async () => {
+  try {
+    const response = await axios.get(`${baseURL}/api/v1.0/server/status`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching status data:", error);
+    return customData.getStatus;
+  }
+};
 
-export async function deleteClient(clientId: string): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0/client/:client_id', 'DELETE', null, clientId);
-}
-// ========================= { SERVER ENDPOINTS } ============================ //
-export async function getStatus(): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0/server/status', 'GET');
-}
+export const getServerInfo = async () => {
+  try {
+    const response = await axios.get(`${baseURL}/api/v1.0/server`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching server info:", error);
+    return customData.getServerInfo;
+  }
+};
 
-export async function getServerInfo(): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0/server', 'GET');
-}
+export const getServerConfig = async () => {
+  try {
+    const response = await axios.get(`${baseURL}/api/v1.0/server/config`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching server config:", error);
+    return customData.getServerConfig;
+  }
+};
 
-export async function getServerConfig(): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0/server/config', 'GET');
-}
-// ============================================================================ //
+export const updateServer = async (updatedConfig: any) => {
+  try {
+    const response = await axios.patch(`${baseURL}/api/v1.0/server`, updatedConfig);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating server config:", error);
+    return customData.getServerConfig;
+  }
+};
+    
+    

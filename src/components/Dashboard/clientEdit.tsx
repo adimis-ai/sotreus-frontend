@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Client } from './types';
 import { AiFillEdit } from 'react-icons/ai';
-import { updateClient, UpdateClientPayload } from '../../modules/index';
+import { updateClient, UpdateClientPayload } from '../../modules/api';
 
 interface ClientEditProps {
   client: Client;
