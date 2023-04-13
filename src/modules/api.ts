@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { customData } from './sampleData';
+import { customData, GET_CLIENT } from './sampleData';
 
 const baseURL = 'https://us01-vpn.sotreus.com';
 
@@ -29,6 +29,16 @@ export interface CreateClientPayload {
   address: string[];
   createdBy: string;
 }
+interface ClientResponse {
+  status: number;
+  success?: boolean; // Make this field optional
+  sucess?: boolean; // Add this field to match the typo in the sample data
+  message: string;
+  clients: any[];
+}
+
+// ================================================================================================================== //
+
 async function callSotreusAPI(
   endpoint: string,
   method: 'GET' | 'POST' | 'DELETE' | 'PATCH',
@@ -76,12 +86,27 @@ export async function deleteClient(clientId: string): Promise<AxiosResponse<any>
   return callSotreusAPI('/api/v1.0/client/:client_id', 'DELETE', null, clientId);
 }
 
-export async function getClients(): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0/client', 'GET');
-}
-
 export async function getClientInfo(clientId: string): Promise<AxiosResponse<any>> {
   return callSotreusAPI('/api/v1.0/client/:client_id', 'GET', null, clientId);
+}
+
+// ================================================================================================================== //
+
+export async function getClients(): Promise<ClientResponse> {
+  const url = baseURL+'/api/v1.0/client';
+
+  try {
+    const response = await axios.get<ClientResponse>(url);
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Request failed with status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error(`Error fetching clients: ${(error as Error).message}`);
+    return GET_CLIENT;
+  }
 }
 
 export const getStatus = async () => {

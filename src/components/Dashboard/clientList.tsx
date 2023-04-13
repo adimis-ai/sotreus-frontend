@@ -13,7 +13,12 @@ interface ClientListProps {
 }
 
 export const ClientList: React.FC<ClientListProps> = ({ clients }) => {
-  const [enabledClients, setEnabledClients] = useState<Record<string, boolean>>({});
+  const [enabledClients, setEnabledClients] = useState<Record<string, boolean>>(
+    clients.reduce((acc: Record<string, boolean>, client) => {
+      acc[client.UUID] = client.Enable;
+      return acc;
+    }, {})
+  );  
 
   const handleEmail = async (clientId:string) => {
     try {
@@ -41,7 +46,6 @@ export const ClientList: React.FC<ClientListProps> = ({ clients }) => {
     }
   }
 
-
   const handleDownload = async (clientId: string) => {
     try {
       console.log("Downloading client config...", clientId);
@@ -67,6 +71,7 @@ export const ClientList: React.FC<ClientListProps> = ({ clients }) => {
       return newEnabledClients;
     });
   };
+
   return (
     <div className="w-full bg-gradient-to-r from-black via-gray-800 to-black p-6 rounded-lg shadow-xl shadow-blue-400/30">
       <div className="overflow-x-auto">
@@ -134,7 +139,6 @@ export const ClientList: React.FC<ClientListProps> = ({ clients }) => {
                     </IconContext.Provider>
                   </div>
                 </td>
-
               </tr>
             ))}
           </tbody>

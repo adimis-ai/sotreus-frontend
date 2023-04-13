@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import CustomCard from "../components/Server/CustomCard";
-import CustomLoader from "../components/Server/CustomLoader";
+import CustomLoader from "../components/CustomLoader";
 import { getStatus, getServerInfo, getServerConfig } from "../modules/api";
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
+import Footer from "../components/Footer";
 
 const ServerPage: React.FC = () => {
   const [status, setStatus] = useState<any>(null);
@@ -56,6 +57,7 @@ const ServerPage: React.FC = () => {
 
         </div>
         </motion.div>
+      <Footer />
     </>
   );
 };
