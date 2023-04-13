@@ -67,7 +67,7 @@ export const ClientContainer: React.FC<ClientContainerProps> = ({ clients }) => 
           <button
             className="bg-gradient-to-br bg-black border border-blue-300 text-white px-6 py-2 rounded-lg shadow-lg transition-all hover:from-blue-300 hover:to-blue-200 hover:text-black hover:border-black mb-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
-            Add Client
+            <AddClient/>
           </button>
         </div>
         <motion.div
