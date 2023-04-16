@@ -15,7 +15,7 @@ const Header = () => {
         <div>
             <div className="navbar">
                 <div className="flex-1">
-                    <a href="/" className="btn btn-ghost normal-case text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200 text-2xl md:text-3xl">Sorteus</a>
+                    <a href="/" className="btn btn-ghost normal-case text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200 text-2xl md:text-3xl">Sotreus</a>
                 </div>
                 <div className="flex-none">
                     <ul className="menu menu-horizontal px-1">

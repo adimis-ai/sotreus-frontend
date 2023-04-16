@@ -6,7 +6,7 @@ interface CustomCardProps {
   edit?: boolean;
 }
 
-const CustomCard: React.FC<CustomCardProps> = ({ data, edit = false }) => {
+const CustomCard: React.FC<CustomCardProps> = ({ data }) => {
   const headers = Object.keys(data);
   const [selectedHeader, setSelectedHeader] = useState(headers[0]);
 

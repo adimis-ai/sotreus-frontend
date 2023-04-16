@@ -30,9 +30,7 @@ const ServerPage: React.FC = () => {
         const statusData = await getStatus();
         setStatus(statusData);
         const serverInfoData = await getServerInfo();
-        console.log("serverInfoData", serverInfoData)
         setServerInfo(serverInfoData.server); 
-        console.log("serverInfo", serverInfoData.data)
         const serverConfigData = await getServerConfig();
         setServerConfig(serverConfigData);
       } catch (error) {

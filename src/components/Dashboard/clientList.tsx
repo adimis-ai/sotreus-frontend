@@ -37,6 +37,7 @@ export const ClientList: React.FC<ClientListProps> = ({ clients }) => {
       if (!response) {
         throw new Error('No response from server');
       }
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting client:', error);
     }
