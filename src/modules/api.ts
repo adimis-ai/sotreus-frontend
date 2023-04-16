@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { customData } from './sampleData';
 
 const baseURL = 'http://localhost:9080';
 
@@ -74,14 +73,9 @@ export async function emailClientConfig(clientId: string): Promise<AxiosResponse
 }
 
 export const updateServer = async (updatedConfig: any) => {
-  try {
-    const response = await axios.patch(`${baseURL}/api/v1.0/server`, updatedConfig);
-    console.log("Server config updated:", response.data)
-    return response.data;
-  } catch (error) {
-    console.error("Error updating server config:", error);
-    return customData.getServerConfig;
-  }
+  const response = await axios.patch(`${baseURL}/api/v1.0/server`, updatedConfig);
+  console.log("Server config updated:", response.data)
+  return response.data;
 };
 
 // WORKING
@@ -118,13 +112,8 @@ export async function getClientConfig(clientId: string, qrcode?: boolean): Promi
 // =============================================( SERVER APIs )=================================================== //
 
 export const getStatus = async () => {
-  try {
     const response = await axios.get(`${baseURL}/api/v1.0/server/status`);
     return response.data;
-  } catch (error) {
-    console.error("Error fetching status data:", error);
-    return customData.getStatus;
-  }
 };
 
 export const getServerInfo = async () => {
@@ -133,13 +122,8 @@ export const getServerInfo = async () => {
 };
 
 export const getServerConfig = async () => {
-  try {
     const response = await axios.get(`${baseURL}/api/v1.0/server/config`);
     return response.data;
-  } catch (error) {
-    console.error("Error fetching server config:", error);
-    return customData.getServerConfig;
-  }
 };
     
     
