@@ -1,7 +1,9 @@
+// Make handleEditClient compatible with the code for the form.
+
 import React, { useState } from 'react';
 import { Client } from './types';
 import { AiFillEdit } from 'react-icons/ai';
-import { updateClient, UpdateClientPayload } from '../../modules/api';
+import { updateClient, getClientInfo } from '../../modules/api';
 
 interface ClientEditProps {
   client: Client;
@@ -13,45 +15,31 @@ export const ClientEdit: React.FC<ClientEditProps> = ({ client }) => {
     const [tags, setTags] = useState(client.Tags.join(', '));
     const [enable, setEnable] = useState(client.Enable);
 
-    const handleEditClient = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        const tagsArray = tags.split(',').map((tag) => tag.trim());
-
-        const updatedClient = {
-            ...client,
-            Name: name,
-            Email: email,
-            Enable: enable,
-            Tags: tagsArray,
-        };
-
-        const updatedPayload: UpdateClientPayload = {
-            id: updatedClient.UUID,
-            name: updatedClient.Name,
-            type: updatedClient.Tags[0], 
-            email: updatedClient.Email,
-            enable: updatedClient.Enable,
-            ignorePersistentKeepalive: false, 
-            presharedKey: updatedClient.PresharedKey,
-            allowedIPs: updatedClient.AllowedIPs,
-            address: updatedClient.Address,
-            privateKey: updatedClient.PrivateKey,
-            publicKey: updatedClient.PublicKey,
-            createdBy: updatedClient.CreatedBy,
-            updatedBy: updatedClient.CreatedBy, 
-            created: new Date(updatedClient.Created).toISOString(),
-            updated: new Date().toISOString()
-        };
-
+    const handleEditClient = async (clientId: string) => {
         try {
-            const response = await updateClient(client.UUID, updatedPayload);
-            console.log('Client updated successfully:', response.data);
+            const response = await getClientInfo(clientId);
+            if (!response) {
+                throw new Error('No response from server');
+            }
+    
+            const clientData = response.data.client;
+    
+            // Update the client data here
+            clientData.Name = name;
+            clientData.Email = email;
+            clientData.Tags = tags.split(',').map((tag: string) => tag.trim());
+            clientData.Enable = enable;
+    
+            const updateResponse = await updateClient(clientId, clientData);
+            if (!updateResponse) {
+                throw new Error('No response from server');
+            }
+    
             window.location.reload();
         } catch (error) {
-            console.error('Error updating client:', error);
+            console.error('Error updating client access:', error);
         }
-    };
+    };    
 
     return (
         <div>
@@ -62,7 +50,7 @@ export const ClientEdit: React.FC<ClientEditProps> = ({ client }) => {
                 <label htmlFor="client-edit" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                 <h3 className="text-3xl text-blue-200 font-bold">Edit Client Information</h3>
                     <div>
-                        <form onSubmit={handleEditClient}>
+                        <form onSubmit={(e) => { e.preventDefault(); handleEditClient(client.UUID); }}>
                             <div className="space-y-4">
                                 <div>
                                     <label htmlFor="name" className="block text-blue-100 text-md text-left my-3 font-semibold">

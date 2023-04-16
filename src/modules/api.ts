@@ -76,12 +76,22 @@ export async function getClientInfo(clientId: string): Promise<AxiosResponse<any
 
 // NOT WORKING
 export async function updateClient(clientId: string, payload: UpdateClientPayload): Promise<AxiosResponse<any>> {
-  return axios.patch(`${baseURL}/api/v1.0.1/client/${clientId}`,payload)
+  return axios.patch(`${baseURL}/api/v1.0/client/${clientId}`,payload)
 }
 
 export async function emailClientConfig(clientId: string): Promise<AxiosResponse<any>> {
   return axios.get(`${baseURL}/api/v1.0/client/${clientId}/email`)
 }
+
+export const updateServer = async (updatedConfig: any) => {
+  try {
+    const response = await axios.patch(`${baseURL}/api/v1.0/server`, updatedConfig);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating server config:", error);
+    return customData.getServerConfig;
+  }
+};
 
 // WORKING
 export async function createClient(payload: CreateClientPayload): Promise<AxiosResponse<any>> {
@@ -129,16 +139,6 @@ export const getServerConfig = async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching server config:", error);
-    return customData.getServerConfig;
-  }
-};
-
-export const updateServer = async (updatedConfig: any) => {
-  try {
-    const response = await axios.patch(`${baseURL}/api/v1.0/server`, updatedConfig);
-    return response.data;
-  } catch (error) {
-    console.error("Error updating server config:", error);
     return customData.getServerConfig;
   }
 };

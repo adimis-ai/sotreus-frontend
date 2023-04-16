@@ -1,10 +1,10 @@
-// Modify the handleDownload and handleClientAccess functions to complete the task according to the instruction provided.
+// Modify the handleClientAccess functions to complete the task according to the instruction provided.
 
 import React from 'react';
 import { Client } from './types';
 import { motion } from 'framer-motion';
 import QrCode from './qrCode';
-import { emailClientConfig, getClientConfig, deleteClient, updateClient, UpdateClientPayload } from '../../modules/api';
+import { emailClientConfig, getClientConfig, deleteClient, updateClient, getClientInfo } from '../../modules/api';
 import { saveAs } from 'file-saver';
 import { HiOutlineMail, HiOutlineTag, HiOutlineSwitchHorizontal, HiOutlineCalendar, HiOutlineRefresh } from 'react-icons/hi';
 
@@ -53,24 +53,22 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
 
   const handleClientAccess = async (clientId: string) => {
     try {
-      const updatedClient: UpdateClientPayload = {
-        id: client.UUID,
-        name: client.Name,
-        type: 'Client', // You need to provide the correct value for this field
-        email: client.Email,
-        enable: !client.Enable,
-        ignorePersistentKeepalive: false, // You need to provide the correct value for this field
-        presharedKey: client.PresharedKey,
-        allowedIPs: client.AllowedIPs,
-        address: client.Address,
-        privateKey: client.PrivateKey,
-        publicKey: client.PublicKey,
-        createdBy: client.CreatedBy,
-        updatedBy: client.CreatedBy, // You need to provide the correct value for this field
-        created: new Date(client.Created).toISOString(),
-        updated: new Date(client.Updated).toISOString(),
-      };
-      await updateClient(clientId, updatedClient);
+      const response = await getClientInfo(clientId);
+      if (!response) {
+        throw new Error('No response from server');
+      }
+
+      const clientData = response.data.client;
+
+      // Update the client data here
+      clientData.Enable = !clientData.Enable;
+      
+      const updateResponse = await updateClient(clientId, clientData);
+      if (!updateResponse) {
+        throw new Error('No response from server');
+      }
+
+      window.location.reload();
     } catch (error) {
       console.error('Error updating client access:', error);
     }
