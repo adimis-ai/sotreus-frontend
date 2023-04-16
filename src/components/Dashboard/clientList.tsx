@@ -4,7 +4,7 @@ import { Client } from './types';
 import { HiOutlineMail , HiDownload } from 'react-icons/hi';
 import { MdDelete } from 'react-icons/md';
 import ClientEdit from './clientEdit';
-import { emailClientConfig, getClientConfig, deleteClient } from '../../modules/api';
+import { emailClientConfig, getClientConfig, deleteClient, updateClient, UpdateClientPayload } from '../../modules/api';
 import { saveAs } from 'file-saver';
 import { IconContext } from "react-icons";
 
@@ -17,17 +17,15 @@ export const ClientList: React.FC<ClientListProps> = ({ clients }) => {
     clients.reduce((acc: Record<string, boolean>, client) => {
       acc[client.UUID] = client.Enable;
       return acc;
-    }, {})
-  );  
+    }, {}),
+  );
 
   const handleEmail = async (clientId:string) => {
     try {
       const response = await emailClientConfig(clientId)
-
       if (!response) {
         throw new Error('No response from server');
       }
-
     } catch (error) {
       console.error('Error sending email to client:', error);
     }
@@ -36,16 +34,14 @@ export const ClientList: React.FC<ClientListProps> = ({ clients }) => {
   const handleDelete = async (clientId:string) => {
     try {
       const response = await deleteClient(clientId)
-
       if (!response) {
         throw new Error('No response from server');
       }
-
     } catch (error) {
       console.error('Error deleting client:', error);
     }
   }
-
+  
   const handleDownload = async (clientId: string) => {
     try {
       console.log("Downloading client config...", clientId);
@@ -64,7 +60,35 @@ export const ClientList: React.FC<ClientListProps> = ({ clients }) => {
   };
 
   const handleClientAccess = async (clientId: string) => {
-    // Update the client access using Patch Endpoint
+    const client = clients.find((c) => c.UUID === clientId);
+    if (!client) {
+      console.error(`Client with ID ${clientId} not found`);
+      return;
+    }
+    try {
+      const updatedClient: UpdateClientPayload = {
+        id: client.UUID,
+        name: client.Name,
+        type: 'Client', // You need to provide the correct value for this field
+        email: client.Email,
+        enable: !client.Enable,
+        ignorePersistentKeepalive: false, // You need to provide the correct value for this field
+        presharedKey: client.PresharedKey,
+        allowedIPs: client.AllowedIPs,
+        address: client.Address,
+        privateKey: client.PrivateKey,
+        publicKey: client.PublicKey,
+        createdBy: client.CreatedBy,
+        updatedBy: client.CreatedBy, // You need to provide the correct value for this field
+        created: new Date(client.Created).toISOString(),
+        updated: new Date(client.Updated).toISOString(),
+      };
+      console.log("clientAccess",updatedClient)
+      await updateClient(clientId, updatedClient);
+    } catch (error) {
+      console.error('Error updating client access:', error);
+    }
+
     setEnabledClients((prev) => {
       const newEnabledClients = { ...prev, [clientId]: !prev[clientId] };
       console.log('Client Access', clientId, newEnabledClients[clientId]);

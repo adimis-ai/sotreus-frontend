@@ -5,6 +5,8 @@ import { getStatus, getServerInfo, getServerConfig } from "../modules/api";
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import Footer from "../components/Footer";
+import { saveAs } from 'file-saver';
+import ServerEdit from "../components/Server/ServerEdit";
 
 const ServerPage: React.FC = () => {
   const [status, setStatus] = useState<any>(null);
@@ -12,13 +14,23 @@ const ServerPage: React.FC = () => {
   const [serverConfig, setServerConfig] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const handleDownload = async () => {
+    try {
+      const config = serverConfig;
+      const blob = new Blob([config], { type: 'text/plain;charset=utf-8' });
+      saveAs(blob, `server_config.txt`);
+    } catch (error) {
+      console.error('Error downloading server config:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const statusData = await getStatus();
         setStatus(statusData);
         const serverInfoData = await getServerInfo();
-        setServerInfo(serverInfoData);
+        setServerInfo(serverInfoData.data.server); 
         const serverConfigData = await getServerConfig();
         setServerConfig(serverConfigData);
       } catch (error) {
@@ -46,9 +58,19 @@ const ServerPage: React.FC = () => {
         >
         <div className="container mx-auto px-4">
 
-          <div className="mt-5">
-            <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-gray-100 to-blue-200 font-bold text-2xl md:text-3xl mb-4">Server Configuration</h1>
-            {serverConfig && <CustomCard data={serverConfig} edit={true}/>}
+          <div className='flex justify-between'>
+            <button 
+              onClick={() => handleDownload()}
+              className="bg-gradient-to-br bg-black border border-blue-300 text-white px-6 py-2 rounded-lg shadow-lg transition-all hover:from-blue-300 hover:to-blue-200 hover:text-black hover:border-black mb-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Download Config
+            </button>
+            <button className="px-6 py-2 rounded-lg shadow-lg transition-all mb-10 border border-black bg-blue-300 text-black hover:bg-black hover:border-blue-300 hover:text-blue-200">
+              <ServerEdit data={serverInfo}/>
+            </button>
+          </div>
+
+          <div className="mb-5">
             <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-gray-100 to-blue-200 font-bold text-2xl md:text-3xl mb-4 mt-8">Server Status</h1>
             {status && <CustomCard data={status} edit={false}/>}
             <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-gray-100 to-blue-200 font-bold text-2xl md:text-3xl mb-4 mt-8">Server Information</h1>

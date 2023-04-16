@@ -47,6 +47,7 @@ export const ClientEdit: React.FC<ClientEditProps> = ({ client }) => {
         try {
             const response = await updateClient(client.UUID, updatedPayload);
             console.log('Client updated successfully:', response.data);
+            window.location.reload();
         } catch (error) {
             console.error('Error updating client:', error);
         }

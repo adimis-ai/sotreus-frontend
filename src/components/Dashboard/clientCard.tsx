@@ -1,8 +1,10 @@
+// Modify the handleDownload and handleClientAccess functions to complete the task according to the instruction provided.
+
 import React from 'react';
 import { Client } from './types';
 import { motion } from 'framer-motion';
 import QrCode from './qrCode';
-import { emailClientConfig, getClientConfig, deleteClient } from '../../modules/api';
+import { emailClientConfig, getClientConfig, deleteClient, updateClient, UpdateClientPayload } from '../../modules/api';
 import { saveAs } from 'file-saver';
 import { HiOutlineMail, HiOutlineTag, HiOutlineSwitchHorizontal, HiOutlineCalendar, HiOutlineRefresh } from 'react-icons/hi';
 
@@ -18,11 +20,9 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
   const handleEmail = async (clientId:string) => {
     try {
       const response = await emailClientConfig(clientId)
-
       if (!response) {
         throw new Error('No response from server');
       }
-
     } catch (error) {
       console.error('Error sending email to client:', error);
     }
@@ -31,38 +31,50 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
   const handleDelete = async (clientId:string) => {
     try {
       const response = await deleteClient(clientId)
-
+      window.location.reload();
       if (!response) {
         throw new Error('No response from server');
       }
-
     } catch (error) {
       console.error('Error deleting client:', error);
     }
   }
 
-
   const handleDownload = async (clientId: string) => {
     try {
-      console.log("Downloading client config...", clientId);
-      const response = await getClientConfig(clientId);
-      
-      if (!response) {
-        throw new Error('No response from server');
-      }
-  
-      const configText = response.data;
-      const blob = new Blob([configText], { type: 'text/plain;charset=utf-8' });
-      saveAs(blob, `${clientId}_config.conf`);
+      const response = await getClientConfig(clientId, false);
+      const config = response.data;
+      const blob = new Blob([config], { type: 'text/plain;charset=utf-8' });
+      saveAs(blob, `${client.Name}_config.txt`);
     } catch (error) {
       console.error('Error downloading client config:', error);
     }
   };
 
   const handleClientAccess = async (clientId: string) => {
-    // Update the client access using Patch Endpoint
-    console.log("Client Access", clientId);
-  }
+    try {
+      const updatedClient: UpdateClientPayload = {
+        id: client.UUID,
+        name: client.Name,
+        type: 'Client', // You need to provide the correct value for this field
+        email: client.Email,
+        enable: !client.Enable,
+        ignorePersistentKeepalive: false, // You need to provide the correct value for this field
+        presharedKey: client.PresharedKey,
+        allowedIPs: client.AllowedIPs,
+        address: client.Address,
+        privateKey: client.PrivateKey,
+        publicKey: client.PublicKey,
+        createdBy: client.CreatedBy,
+        updatedBy: client.CreatedBy, // You need to provide the correct value for this field
+        created: new Date(client.Created).toISOString(),
+        updated: new Date(client.Updated).toISOString(),
+      };
+      await updateClient(clientId, updatedClient);
+    } catch (error) {
+      console.error('Error updating client access:', error);
+    }
+  };
 
   return (
     <motion.div
@@ -116,7 +128,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
             <button onClick={() => handleClientAccess(client.UUID)} className="bg-gradient-to-r from-blue-300 to-blue-500 text-gray-900 font-semibold rounded-lg p-2">{client.Enable ? 'Disable Client' : 'Enable Client'}</button>
             <button onClick={() => handleEmail(client.UUID)} className="bg-gradient-to-r from-blue-300 to-blue-500 text-gray-900 font-semibold rounded-lg p-2">Email Client</button>
             <div className="bg-gradient-to-r from-blue-300 to-blue-500 text-gray-900 font-semibold rounded-lg p-2">
-              <QrCode privateKey={client.PrivateKey}/>
+              <QrCode clientId={client.UUID}/>
             </div>
             <button onClick={() => handleDownload(client.UUID)} className="bg-gradient-to-r from-blue-300 to-blue-500 text-gray-900 font-semibold rounded-lg p-2">Download</button>
           </div>

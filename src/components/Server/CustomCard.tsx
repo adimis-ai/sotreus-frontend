@@ -1,6 +1,5 @@
 // src/components/CustomCard.tsx
 import React, { useState } from "react";
-import ServerEdit from "../../components/Server/ServerEdit";
 
 interface CustomCardProps {
   data: any;
@@ -17,11 +16,6 @@ const CustomCard: React.FC<CustomCardProps> = ({ data, edit = false }) => {
 
   return (
     <div className="w-full bg-gradient-to-r from-black via-gray-800 to-black p-6 rounded-lg shadow-xl shadow-blue-400/30 relative">
-      {edit && (
-        <div className="absolute top-0 right-5 mt-7">
-          <ServerEdit data={data} edit={true} />
-        </div>
-      )}
       <div className="overflow-x-auto">
         <select
           value={selectedHeader}

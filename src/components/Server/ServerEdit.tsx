@@ -1,18 +1,16 @@
-// ServerEdit.tsx
-
 import React, { useState } from 'react';
 import { updateServer } from '../../modules/api';
 
 interface ServerEditProps {
   data: any;
-  edit: boolean;
 }
 
-export const ServerEdit: React.FC<ServerEditProps> = ({ data, edit }) => {
-  const [address, setAddress] = useState(data.address[0]);
-  const [listenPort, setListenPort] = useState(data.listenPort);
-  const [dns, setDns] = useState(data.dns.join(', '));
-  const [persistentKeepalive, setPersistentKeepalive] = useState(data.persistentKeepalive);
+export const ServerEdit: React.FC<ServerEditProps> = ({ data }) => {
+  const [address, setAddress] = useState(data?.address ? data.address[0] : '');
+  console.log(data)
+  const [listenPort, setListenPort] = useState(data?.listenPort || '');
+  const [dns, setDns] = useState(data?.dns ? data.dns.join(', ') : '');
+  const [persistentKeepalive, setPersistentKeepalive] = useState(data?.persistentKeepalive || '');  
 
   const handleEditServer = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -38,7 +36,7 @@ export const ServerEdit: React.FC<ServerEditProps> = ({ data, edit }) => {
   return (
 
     <div>
-      <label htmlFor="server-edit" className='bg-gradient-to-br bg-black border border-blue-300 text-white px-8 py-3 rounded-lg shadow-lg transition-all hover:from-blue-300 hover:to-blue-200 hover:text-black hover:border-black mb-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'>Edit</label>
+      <label htmlFor="server-edit" className=''>Edit</label>
       <input type="checkbox" id="server-edit" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box relative w-full bg-gray-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-80 border border-gray-100">

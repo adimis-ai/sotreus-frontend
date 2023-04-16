@@ -13,12 +13,16 @@ export const ClientContainer: React.FC<ClientContainerProps> = ({ clients }) => 
   const [card, setCard] = useState(true);
 
   const renderCards = () => {
+    if (!clients) {
+      return null;
+    }
+  
     return clients.map((client, index) => (
       <motion.div key={index} className="py-2 flex">
         <ClientCard client={client} />
       </motion.div>
     ));
-  };
+  };  
 
   return (
     <>

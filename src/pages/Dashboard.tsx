@@ -1,4 +1,3 @@
-// Dashboard.tsx
 import React, { useEffect, useState } from 'react';
 import { ClientContainer } from '../components/Dashboard/clientContainer';
 import { Client } from '../components/Dashboard/types';

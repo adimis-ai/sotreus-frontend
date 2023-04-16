@@ -1,7 +1,9 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { customData, GET_CLIENT } from './sampleData';
+// Can you add a loader in Disable Client, Email Client, Download button and I don't have a loader component so make one for me.
 
-const baseURL = 'https://us01-vpn.sotreus.com';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { customData } from './sampleData';
+
+const baseURL = 'http://localhost:9080';
 
 export interface UpdateClientPayload {
   id: string;
@@ -20,6 +22,7 @@ export interface UpdateClientPayload {
   created: string;
   updated: string;
 }
+
 export interface CreateClientPayload {
   name: string;
   tags: string[];
@@ -37,7 +40,7 @@ interface ClientResponse {
   clients: any[];
 }
 
-// ================================================================================================================== //
+// ========================================( DASHBOARD APIs )==================================================== //
 
 async function callSotreusAPI(
   endpoint: string,
@@ -66,48 +69,44 @@ async function callSotreusAPI(
   return axiosInstance(config);
 }
 
+// NOT NEEDED
+export async function getClientInfo(clientId: string): Promise<AxiosResponse<any>> {
+  return callSotreusAPI('/api/v1.0/client/:client_id', 'GET', null, clientId);
+}
+
+// NOT WORKING
+export async function updateClient(clientId: string, payload: UpdateClientPayload): Promise<AxiosResponse<any>> {
+  return axios.patch(`${baseURL}/api/v1.0.1/client/${clientId}`,payload)
+}
+
+export async function emailClientConfig(clientId: string): Promise<AxiosResponse<any>> {
+  return axios.get(`${baseURL}/api/v1.0/client/${clientId}/email`)
+}
+
+// WORKING
 export async function createClient(payload: CreateClientPayload): Promise<AxiosResponse<any>> {
   return callSotreusAPI('/api/v1.0/client', 'POST', payload);
 }
 
-export async function updateClient(clientId: string, payload: UpdateClientPayload): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0.1/client/:client_id', 'PATCH', payload, clientId);
-}
-
-export async function getClientConfig(clientId: string, qrcode?: boolean): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0/client/:client_id/config', 'GET', null, clientId, qrcode);
-}
-
-export async function emailClientConfig(clientId: string): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0/client/:client_id/email', 'GET', null, clientId);
+export async function getClients(): Promise<ClientResponse> {
+  const url = `${baseURL}/api/v1.0/client`
+  const response = await axios.get<ClientResponse>(url);
+  if (response.status === 200) {
+    return response.data;
+  } else {
+    throw new Error(`Request failed with status: ${response.status}`);
+  }
 }
 
 export async function deleteClient(clientId: string): Promise<AxiosResponse<any>> {
   return callSotreusAPI('/api/v1.0/client/:client_id', 'DELETE', null, clientId);
 }
 
-export async function getClientInfo(clientId: string): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0/client/:client_id', 'GET', null, clientId);
+export async function getClientConfig(clientId: string, qrcode?: boolean): Promise<AxiosResponse<any>> {
+  return callSotreusAPI('/api/v1.0/client/:client_id/config', 'GET', null, clientId, qrcode);
 }
 
-// ================================================================================================================== //
-
-export async function getClients(): Promise<ClientResponse> {
-  const url = baseURL+'/api/v1.0/client';
-
-  try {
-    const response = await axios.get<ClientResponse>(url);
-
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      throw new Error(`Request failed with status: ${response.status}`);
-    }
-  } catch (error) {
-    console.error(`Error fetching clients: ${(error as Error).message}`);
-    return GET_CLIENT;
-  }
-}
+// =============================================( SERVER APIs )=================================================== //
 
 export const getStatus = async () => {
   try {
@@ -120,13 +119,8 @@ export const getStatus = async () => {
 };
 
 export const getServerInfo = async () => {
-  try {
-    const response = await axios.get(`${baseURL}/api/v1.0/server`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching server info:", error);
-    return customData.getServerInfo;
-  }
+  const response = await axios.get(`${baseURL}/api/v1.0/server`);
+  return response
 };
 
 export const getServerConfig = async () => {

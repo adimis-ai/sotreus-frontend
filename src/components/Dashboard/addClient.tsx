@@ -31,6 +31,7 @@ const AddClient = () => {
     try {
       const response = await createClient(payload);
       console.log('Client added successfully:', response.data);
+      window.location.reload();
     } catch (error) {
       console.error('Error adding client:', error);
     }
