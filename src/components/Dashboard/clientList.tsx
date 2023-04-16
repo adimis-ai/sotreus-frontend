@@ -74,17 +74,12 @@ export const ClientList: React.FC<ClientListProps> = ({ clients }) => {
       }
 
       const clientData = response.data.client;
-
-      // Update the client data here
       clientData.Enable = !clientData.Enable;
       
       const updateResponse = await updateClient(clientId, clientData);
       if (!updateResponse) {
         throw new Error('No response from server');
       }
-
-      window.location.reload();
-
     } catch (error) {
       console.error('Error updating client access:', error);
     }
@@ -125,9 +120,9 @@ export const ClientList: React.FC<ClientListProps> = ({ clients }) => {
                   <div className="text-sm">{client.Tags.join(', ')}</div>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${client.Enable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                    {client.Enable ? 'Enabled' : 'Disabled'}
-                  </span>
+                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${enabledClients[client.UUID] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                  {enabledClients[client.UUID] ? 'Enabled' : 'Disabled'}
+                </span>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap">
                   <div className="text-sm">{new Date(client.Created).toLocaleDateString()}</div>

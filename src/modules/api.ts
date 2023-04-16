@@ -1,5 +1,3 @@
-// Can you add a loader in Disable Client, Email Client, Download button and I don't have a loader component so make one for me.
-
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { customData } from './sampleData';
 
@@ -34,8 +32,8 @@ export interface CreateClientPayload {
 }
 interface ClientResponse {
   status: number;
-  success?: boolean; // Make this field optional
-  sucess?: boolean; // Add this field to match the typo in the sample data
+  success?: boolean; 
+  sucess?: boolean; 
   message: string;
   clients: any[];
 }
@@ -69,15 +67,7 @@ async function callSotreusAPI(
   return axiosInstance(config);
 }
 
-// NOT NEEDED
-export async function getClientInfo(clientId: string): Promise<AxiosResponse<any>> {
-  return callSotreusAPI('/api/v1.0/client/:client_id', 'GET', null, clientId);
-}
-
 // NOT WORKING
-export async function updateClient(clientId: string, payload: UpdateClientPayload): Promise<AxiosResponse<any>> {
-  return axios.patch(`${baseURL}/api/v1.0/client/${clientId}`,payload)
-}
 
 export async function emailClientConfig(clientId: string): Promise<AxiosResponse<any>> {
   return axios.get(`${baseURL}/api/v1.0/client/${clientId}/email`)
@@ -86,6 +76,7 @@ export async function emailClientConfig(clientId: string): Promise<AxiosResponse
 export const updateServer = async (updatedConfig: any) => {
   try {
     const response = await axios.patch(`${baseURL}/api/v1.0/server`, updatedConfig);
+    console.log("Server config updated:", response.data)
     return response.data;
   } catch (error) {
     console.error("Error updating server config:", error);
@@ -94,8 +85,16 @@ export const updateServer = async (updatedConfig: any) => {
 };
 
 // WORKING
+export async function getClientInfo(clientId: string): Promise<AxiosResponse<any>> {
+  return callSotreusAPI('/api/v1.0/client/:client_id', 'GET', null, clientId);
+}
+
 export async function createClient(payload: CreateClientPayload): Promise<AxiosResponse<any>> {
   return callSotreusAPI('/api/v1.0/client', 'POST', payload);
+}
+
+export async function updateClient(clientId: string, payload: UpdateClientPayload): Promise<AxiosResponse<any>> {
+  return axios.patch(`${baseURL}/api/v1.0/client/${clientId}`,payload)
 }
 
 export async function getClients(): Promise<ClientResponse> {
@@ -130,7 +129,7 @@ export const getStatus = async () => {
 
 export const getServerInfo = async () => {
   const response = await axios.get(`${baseURL}/api/v1.0/server`);
-  return response
+  return response.data;
 };
 
 export const getServerConfig = async () => {

@@ -1,6 +1,6 @@
 // Modify the handleClientAccess functions to complete the task according to the instruction provided.
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Client } from './types';
 import { motion } from 'framer-motion';
 import QrCode from './qrCode';
@@ -16,6 +16,7 @@ interface ClientCardProps {
 }
 
 export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
+  const [enabledClients, setEnabledClients] = useState(client.Enable);
 
   const handleEmail = async (clientId:string) => {
     try {
@@ -31,10 +32,10 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
   const handleDelete = async (clientId:string) => {
     try {
       const response = await deleteClient(clientId)
-      window.location.reload();
       if (!response) {
         throw new Error('No response from server');
       }
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting client:', error);
     }
@@ -57,18 +58,13 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
       if (!response) {
         throw new Error('No response from server');
       }
-
       const clientData = response.data.client;
-
-      // Update the client data here
       clientData.Enable = !clientData.Enable;
-      
       const updateResponse = await updateClient(clientId, clientData);
       if (!updateResponse) {
         throw new Error('No response from server');
       }
-
-      window.location.reload();
+      setEnabledClients(!clientData.Enable);
     } catch (error) {
       console.error('Error updating client access:', error);
     }
@@ -123,7 +119,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
           </div>
           {/* Bottom of the card */}
           <div className="grid grid-cols-2 gap-4 mt-6 text-center">
-            <button onClick={() => handleClientAccess(client.UUID)} className="bg-gradient-to-r from-blue-300 to-blue-500 text-gray-900 font-semibold rounded-lg p-2">{client.Enable ? 'Disable Client' : 'Enable Client'}</button>
+            <button onClick={() => handleClientAccess(client.UUID)} className="bg-gradient-to-r from-blue-300 to-blue-500 text-gray-900 font-semibold rounded-lg p-2">{enabledClients ? 'Disable Client' : 'Enable Client'}</button>
             <button onClick={() => handleEmail(client.UUID)} className="bg-gradient-to-r from-blue-300 to-blue-500 text-gray-900 font-semibold rounded-lg p-2">Email Client</button>
             <div className="bg-gradient-to-r from-blue-300 to-blue-500 text-gray-900 font-semibold rounded-lg p-2">
               <QrCode clientId={client.UUID}/>

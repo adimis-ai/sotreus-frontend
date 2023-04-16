@@ -30,7 +30,9 @@ const ServerPage: React.FC = () => {
         const statusData = await getStatus();
         setStatus(statusData);
         const serverInfoData = await getServerInfo();
-        setServerInfo(serverInfoData.data.server); 
+        console.log("serverInfoData", serverInfoData)
+        setServerInfo(serverInfoData.server); 
+        console.log("serverInfo", serverInfoData.data)
         const serverConfigData = await getServerConfig();
         setServerConfig(serverConfigData);
       } catch (error) {
@@ -65,9 +67,9 @@ const ServerPage: React.FC = () => {
             >
               Download Config
             </button>
-            <button className="px-6 py-2 rounded-lg shadow-lg transition-all mb-10 border border-black bg-blue-300 text-black hover:bg-black hover:border-blue-300 hover:text-blue-200">
-              <ServerEdit data={serverInfo}/>
-            </button>
+            <div className="px-6 py-2 rounded-lg shadow-lg transition-all mb-10 border border-black bg-blue-300 text-black hover:bg-black hover:border-blue-300 hover:text-blue-200">
+              <ServerEdit/>
+            </div>
           </div>
 
           <div className="mb-5">
